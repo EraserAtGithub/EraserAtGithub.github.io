@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>注册表 文件关联程序，修改关联图标 看了一堆资料后</title>
+</head>
+<body>
+    <p>首先发现了https://blog.csdn.net/nnKevi/article/details/125638456<br/>
+    后面找到了https://www.cnblogs.com/aixcyi/p/10328184.html，<br/>
+    知道了HEKY_CLASSES_ROOT是备份，关于格式关联的注册表项目应该放在用户这里（如单用户HEKY_CURRENT_USER\Software\Classes）</p>
+    <p>注意，Win10和Win7的机制应该是相同的。</p>  <!--[另一种浮动形式]我开了两个虚拟机，发现Win7里面有Win10里面无，想到Win10的UWP生态故有怀疑。然后我叫别人给我截一下他电脑的图发现其实一样-->
+    <br/><br/>
+    <img src="/website picture/3/1.png">
+    <p>基本逻辑是，先随便设置一个文件夹，然后与此文件夹关联。</p>
+    <p>哪里放图标哪里写文件说明应该可以看的见了吧？<br/><!--[另一种浮动形式]呃，文件说明就是，比如你在C盘建立一个txt，然后右边会写着：文本文档；就是详细视图里面的"种类"一栏--></p>
+    <p>经过测试，拿一张48x48或者512x512这种"标准图标尺寸"（512x512,256x256,128x128,96x96,64x64,48x48,32x32,24x24,16x16，可能有遗漏的）的图标就行了</p>
+    <!--[另一种浮动形式]原文：比较有意思的是，我看了一下对应的图标，大小是48x48，而且软件里面并没有其他的图标了，所以你只需要准备一张48x48的图标就行了-->
+    <!--这里的对应图标是指上面图片Bandizip的图标，后面在制作图标时发现WPS一张文件关联图标，拖到PS里面告诉我里面包含9张图标（上面九个尺寸，应该是对应着文件资源管理器不同视图的图标大小）-->
+    <!--（我提取的，不知道其他人提取的有没有这种情况）（PS版本是PhotoShop CC 2019 20.0.10.28848），后面想起来Bandizip一张48x48是不是里面也有几张图标，拖进PS果不其然-->
+    <!--不过我测试了一下，就算是一张里面就包含一张图标的48x48，也是可以拿过去用的，在更改不同视图图标大小有变化的时候，Windows会自动缩放这张图标，只不过是没有对16x16这种很小的尺寸专门设计一个适合此大小来代表文件的图标，可能只是对单个图标进行缩放会有点生硬罢了-->
+    <br/><br/>
+    <p>不过，这里的FriendlyAppName是什么意思？本来我在同样讲文件关联的文章好像看到过，但是找不到了，只好针对性地搜索了下<a href = "https://zhidao.baidu.com/question/51130901.html/">找到了</a><br/>
+    <!--[另一种浮动形式]要是看不懂它在讲什么，你右键一个文件，选择打开方式，然后点电脑上的其他程序选一个看看效果，也许你就能明白了-->
+    至于你要是想对<a href = "https://www.cnblogs.com/aixcyi/p/10328184.html/">所有用户设置（HEKY_LOCAL_MACHINE）</a>，操作是<a href = "https://blog.csdn.net/qq_33496962/article/details/81158001/">一样的</a></p>
+    <br/><br/>
+    <hr>
+    <br/><br/>
+    <p>现在是设置好了，那么如果要删除你设置的文件关联呢？你不仅要删除你设置的，还要删除HEKY_CLASSES_ROOT里的东西，删什么是<a href = "https://www.jianshu.com/p/7b5a7b304c2c/">一样的</a>，它是个备份嘛</p>
+    <!--[另一种浮动形式]支持此项的资料其实很多吧，比如https://zhuanlan.zhihu.com/p/57119504（这一篇看不懂的话，这一篇下面作者贴了一个完整版）和https://www.zhihu.com/question/288111825/answer/1563170902-->
+    <img src="/website picture/3/2.png">
+    <br/><br/>
+    <hr>
+    <br/><br/>
+    <img src="/website picture/3/3.png"><!--图片在左边-->
+    <p>接下来简单介绍一下这种情况，即网上文章里面的HEKY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts是什么。<br/>
+    打开HEKY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts里面html的OpenWithList文件夹，里面就是这个列表<br/>
+    如图，右键打开方式里面有一个Atom编辑器，可是我想把Atom从这个列表中去掉怎么办？<br/>
+    注意删除之后保持一下abcd的顺序，图我就不贴了。<br/><!--[另一种浮动形式]我看到的资料里面讲这个的有https://blog.csdn.net/erikaIT/article/details/71637167和https://www.cnblogs.com/aixcyi/p/10328184.html,注意erikaIT的IT是i不是L--></p>
+    HEKY_LOCAL_MACHINE里面也有一个HEKY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts，上面讲了这个是所有用户的。<br/>
+    不过，并没有看专门解决"把Atom从这个列表中去掉"的资料，可能会有网上一堆都是把关联放到HEKY_CLASSES_ROOT里面，虽然有用但实际上应该放到HEKY_CURRENT_USER<!--[另一种浮动形式]或者多用户HEKY_LOCAL_MACHINE-->里面的问题了。</p>
+    <br/><br/><br/>
+    <p>最后提醒一下，如果你是针对Windows2000以上的系统，那么<a href = "https://blog.csdn.net/erikaIT/article/details/71637167/">此教程应该无效</a></p>
+    <p>而至于 想 通过 看注册表关联文章 知道 如何删除 其他程序的文件关联 注册表残留，可能还要点东西，如果你搜"注册表 文件关联"，其他文章内容和这篇差不多，但是却无法解释以下现象：<br/>
+    <img src="/website picture/3/4.png"><!--图片在右边-->
+    结构混乱，好像还没见过；好在其他文件夹是正常的（pdf_auto_file就是上文基本逻辑所说的随便的文件夹）；kso就是Kingsoft Office的缩写，我装的是金山的WPS Office</p>
+</body>
+</html>
